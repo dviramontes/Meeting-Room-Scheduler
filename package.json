@@ -1,0 +1,36 @@
+{
+  "name": "D3-Stacks-Playground",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "gulp-jasmine": "^2.0.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "jasmine-core": "^2.1.3",
+    "karma": "^0.12.28",
+    "karma-6to5-preprocessor": "^1.0.0",
+    "karma-chrome-launcher": "^0.1.7",
+    "karma-coverage": "^0.2.7",
+    "karma-jasmine": "^0.3.3",
+    "karma-jspm": "^1.1.1",
+    "karma-phantomjs-launcher": "^0.1.4"
+  },
+  "scripts": {
+    "watch": "watchify -t 6to5ify ./src/app.jsx -o ./dist/bundle.js -v"
+  },
+  "author": "",
+  "license": "ISC",
+  "jspm": {
+    "directories": {
+      "lib": "src"
+    },
+    "dependencies": {
+      "bootstrap": "^3.3.2",
+      "d3": "^3.5.5",
+      "jquery": "^2.1.3",
+      "lodash": "github:lodash/lodash@^3.5.0"
+    }
+  }
+}
