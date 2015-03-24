@@ -18,7 +18,22 @@ class TimeLine {
 					this.clear();
 					this.times.push(t);
 				} else if(t[0] >= this.openingTime && t[1] <= this.closingTime){
-					this.times.push(t);
+					let overlapping = this.times.filter((e)=>{
+						return !this.notOverlapping([e,t]);
+					});
+					let notOverlapping = this.times.filter((e)=>{
+						return this.notOverlapping([e,t]);
+					});
+					if(overlapping.length >= 1){
+						let combined = this.combine([_.first(overlapping), t]);
+						this.clear();
+						this.times.push(combined)
+						if(notOverlapping.length >= 1){
+							this.times.push(notOverlapping);
+						}
+                    }else{
+						this.times.push(t);
+					}
 				} else {
 					throw new Error('argument is out of range..');
 				}
@@ -40,12 +55,14 @@ class TimeLine {
 			return [this.openingTime, this.closingTime];
 		}else if(this.notOverlapping(this.times)){
 			return this.times;
-		}else{ // combined, not overlapping
-			let series = this.normalize(this.times);
-			this.clear();
-			this.times.push([this.min(series), this.max(series)])
-			return _.first(this.times);
+		}else{ // combined, not notOverlapping
+			return this.combine(this.times);
 		}
+	}
+
+	combine(times){
+		let series = this.normalize(times);
+		return [this.min(series), this.max(series)];
 	}
 
 	clear(){
@@ -57,11 +74,16 @@ class TimeLine {
 		return x == this.openingTime && y == this.closingTime;
 	}
 
+	diffSum(times){
+		let sum = 0;
+		times.forEach((a) => sum += a[1] - a[0]);
+		return sum;
+	}
+
 	notOverlapping(times) {
 		let series = this.normalize(times);
-		let diffSum = 0;
-		times.forEach((a) => diffSum += a[1] - a[0]);
-		return _.unique(series,true).length === series.length && this.closingTime - diffSum > diffSum;
+		let diffSum = this.diffSum(times);
+		return _.unique(series,true).length === series.length && this.max(series) - diffSum > 0;
 	}
 
 	max(s){
@@ -84,9 +106,9 @@ class TimeLine {
 		console.log(`entries :: ${this.times.length}`);
 		this.times.map((x)=>{
 			for(let [index, element] of x.entries()){
-			console.log(`Time ${index}: ${element}pm`)
-		}
-	})
+				console.log(`Time ${index}: ${element}pm`)
+			}
+		});
 
 	}
 }
