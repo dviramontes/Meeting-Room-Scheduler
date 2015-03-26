@@ -42,6 +42,12 @@ describe('a Timeline', ()=>{
 		expect(timeLine.get()).toEqual([1,8]);
 		timeLine.add([9,10]);
 		expect(timeLine.get()).toEqual([[1,8],[9,10]]);
+		timeLine.clear();
+		timeLine.add([1, 3]);
+		timeLine.add([2, 5]);
+		expect(timeLine.get()).toEqual([1, 5]);
+		timeLine.add([7, 9]);
+		expect(timeLine.get()).toEqual([[1, 5], [7, 9]]);
 	});
 	afterEach(()=> timeLine.clear());
 });

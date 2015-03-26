@@ -18,16 +18,12 @@ class TimeLine {
 					this.clear();
 					this.times.push(t);
 				} else if(t[0] >= this.openingTime && t[1] <= this.closingTime){
-					let overlapping = this.times.filter((e)=>{
-						return !this.notOverlapping([e,t]);
-					});
-					let notOverlapping = this.times.filter((e)=>{
-						return this.notOverlapping([e,t]);
-					});
+					let overlapping = this.times.filter(e => !this.notOverlapping([e, t]));
+					let notOverlapping = this.times.filter(e => this.notOverlapping([e, t]));
 					if(overlapping.length >= 1){
 						let combined = this.combine([_.first(overlapping), t]);
 						this.clear();
-						this.times.push(combined)
+						this.times.push(combined);
 						if(notOverlapping.length >= 1){
 							this.times.push(notOverlapping);
 						}
@@ -46,9 +42,9 @@ class TimeLine {
 	}
 
 	get(){
-		if(this.times.length == 0 ){
+		if (this.times.length === 0) {
 			return this.times;
-		}else if(this.times.length == 1){
+		} else if (this.times.length === 1) {
 			return _.first(this.times);
 		}else if(this.clobbered(this.times)) {
 			this.clear();
@@ -76,7 +72,7 @@ class TimeLine {
 
 	diffSum(times){
 		let sum = 0;
-		times.forEach((a) => sum += a[1] - a[0]);
+		times.forEach(a => sum += a[1] - a[0]);
 		return sum;
 	}
 
@@ -99,18 +95,9 @@ class TimeLine {
 	}
 
 	isNumberPair(pair){
-		return pair.every((e) => typeof e === 'number');
+		return pair.every(e => typeof e === 'number');
 	}
 
-	report(){
-		console.log(`entries :: ${this.times.length}`);
-		this.times.map((x)=>{
-			for(let [index, element] of x.entries()){
-				console.log(`Time ${index}: ${element}pm`)
-			}
-		});
-
-	}
 }
 
 export {TimeLine}
